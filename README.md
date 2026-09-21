@@ -65,3 +65,21 @@ Vulnerabilidades de execução de código (injeção, desserialização, upload 
    Carga incremental em vez de recarga completa; execução agendada automaticamente (ex: GitHub Actions), sem depender de rodar o notebook manualmente; uso do campo de referências externas para estimar o tempo real de patch por fornecedor; e um painel conectado diretamente ao banco, para consulta contínua sem reexecutar o notebook.
 
 ## Estrutura do repositório
+├── README.md
+├── LICENSE
+├── notebooks/
+│ └── MVP_Seguranca_Cibernetica.ipynb
+├── catalogo/
+│ ├── catalogo_dados.csv
+│ └── metadados_coleta.json
+└── evidencias/
+├── supabase_table_editor.png
+└── resultados_consultas.png
+
+
+## Como reproduzir
+
+1. Criar um projeto gratuito no [Supabase](https://supabase.com) e obter a connection string (Connect > Transaction Pooler, formato URI).
+2. Abrir `notebooks/MVP_Seguranca_Cibernetica.ipynb` no Google Colab.
+3. Substituir a variável `DATABASE_URL` pela connection string obtida no passo 1.
+4. Executar as células em ordem, da Busca e Coleta até a Análise.

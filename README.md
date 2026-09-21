@@ -1,7 +1,8 @@
-# MVP — Segurança Cibernética: Panorama de Vulnerabilidades (NVD/CVE)
+# MVP: Segurança Cibernética: Panorama de Vulnerabilidades (NVD/CVE)
 
 Trabalho final da disciplina **Sistemas de Suporte à Decisão**, Universidade de Brasília (UnB).
 Professor: André Luiz Marques Serrano.
+Aluna: Maria Eduarda Oliani.
 
 ## Objetivo
 

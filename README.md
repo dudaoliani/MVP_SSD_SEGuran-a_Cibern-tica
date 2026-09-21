@@ -48,7 +48,7 @@ Vulnerabilidades de execução de código (injeção, desserialização, upload 
 
 ## Qualidade dos dados
 
-*(preencher com o resumo das checagens de completude, unicidade, consistência, conformidade e acurácia realizadas na seção 5.1 do notebook)*
+*A avaliação cobriu completude, unicidade, consistência, conformidade e acurácia sobre as 71.653 linhas da tabela fato. Os únicos nulos encontrados foram em cvss_score, cvss_severidade e cvss_versao (3.209 registros, 4,48% cada) — as CVEs ainda sem pontuação atribuída, coerente com o resultado da Pergunta 5. Não há duplicatas de cve_id (unicidade) nem inconsistência entre datas de publicação e modificação. Na conformidade, 11 registros ficaram fora do domínio de severidade esperado: são CVEs com o valor textual "NONE" retornado pela própria NVD (distinto de nulo), não previsto no domínio declarado no Catálogo de Dados. Acurácia: nenhum score fora do intervalo válido [0, 10]. Em conjunto, o conjunto de dados apresenta alta qualidade, sem problemas que comprometam as análises realizadas.*
 
 ## Autoavaliação
 

@@ -40,7 +40,7 @@ O pipeline foi construído em Python, executado no Google Colab, e segue as etap
 3. **Carga** — persistência em banco PostgreSQL gerenciado (Supabase), com recarga completa das tabelas a cada execução.
 4. **Análise** — avaliação de qualidade dos dados (completude, unicidade, consistência, conformidade, acurácia) e resposta às cinco perguntas de negócio por meio de consultas SQL executadas diretamente sobre o banco na nuvem.
 
-O notebook completo, com todas as etapas documentadas célula a célula, está em `notebooks/MVP_Seguranca_Cibernetica.ipynb`.
+O notebook completo, com todas as etapas documentadas célula a célula, está em `MVP_Seguranca_Cibernetica_(3).ipynb`.
 
 ## Resultados
 
@@ -65,21 +65,20 @@ Vulnerabilidades de execução de código (injeção, desserialização, upload 
    Carga incremental em vez de recarga completa; execução agendada automaticamente (ex: GitHub Actions), sem depender de rodar o notebook manualmente; uso do campo de referências externas para estimar o tempo real de patch por fornecedor; e um painel conectado diretamente ao banco, para consulta contínua sem reexecutar o notebook.
 
 ## Estrutura do repositório
-├── README.md
-├── LICENSE
-├── notebooks/
-│ └── MVP_Seguranca_Cibernetica.ipynb
-├── catalogo/
-│ ├── catalogo_dados.csv
-│ └── metadados_coleta.json
-└── evidencias/
-├── supabase_table_editor.png
-└── resultados_consultas.png
+ ├── README.md
+   ├── LICENSE
+   ├── MVP_Seguranca_Cibernetica_(3).ipynb
+   ├── catalogo/
+   │   ├── catalogo_dados.csv
+   │   └── metadados_coleta.json
+   └── evidencias/
+       ├── supabase_table_editor.png
+       └── resultados_consultas.png
 
 
 ## Como reproduzir
 
 1. Criar um projeto gratuito no [Supabase](https://supabase.com) e obter a connection string (Connect > Transaction Pooler, formato URI).
-2. Abrir `notebooks/MVP_Seguranca_Cibernetica.ipynb` no Google Colab.
+2. Abrir `MVP_Seguranca_Cibernetica_(3).ipynb` no Google Colab.
 3. Substituir a variável `DATABASE_URL` pela connection string obtida no passo 1.
 4. Executar as células em ordem, da Busca e Coleta até a Análise.

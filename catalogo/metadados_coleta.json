@@ -1,0 +1,13 @@
+{
+  "data_coleta_utc": "2026-09-21T22:39:21.811120",
+  "fonte": "NVD - National Vulnerability Database (NIST)",
+  "endpoint": "https://services.nvd.nist.gov/rest/json/cves/2.0",
+  "periodo_coletado": {
+    "inicio": "2023-01-01T00:00:00.000",
+    "fim": "2025-01-01T00:00:00.000"
+  },
+  "volume_registros": 71653,
+  "formato_original": "JSON (API NVD CVE 2.0)",
+  "licenca": "Domínio público / atribuição ao NIST (https://nvd.nist.gov/general/faq)",
+  "janelas_com_falha": []
+}

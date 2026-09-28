@@ -29,7 +29,7 @@ Aluna: Maria Eduarda Oliani.
 
 O pipeline foi construído em Python, executado no Google Colab, e segue as etapas abaixo.
 
-1. **Busca e Coleta** — consumo da API pública da NVD, com paginação, respeito ao rate limit, e nova tentativa automática (retry com espera progressiva) em caso de erros transitórios do servidor (429/500/502/503/504) ou timeout de conexão.
+1. **Busca e Coleta** — consumo da API pública da NVD, com paginação, respeito ao rate limit e nova tentativa automática (retry com espera progressiva) em caso de erros transitórios do servidor (429/500/502/503/504) ou timeout de conexão.
 2. **Modelagem** — Esquema Estrela, com granularidade de uma linha por CVE na tabela fato:
    - `fato_vulnerabilidade`: severidade (CVSS), datas do ciclo de vida, status, categoria CWE primária.
    - `dim_cwe`: categorias de fraqueza (Common Weakness Enumeration).
@@ -37,40 +37,41 @@ O pipeline foi construído em Python, executado no Google Colab, e segue as etap
    - `ponte_vulnerabilidade_produto`: relação muitos-para-muitos entre CVEs e produtos.
    - `dim_tempo`: granularidade diária, para agregações temporais.
    - Documentação completa de cada atributo em `catalogo/catalogo_dados.csv`.
-3. **Carga** — persistência em banco PostgreSQL gerenciado (Supabase), com recarga completa das tabelas a cada execução.
-A persistência das tabelas no Supabase é comprovada pela captura abaixo:
+3. **Carga** — persistência em banco PostgreSQL gerenciado (Supabase), com recarga completa das tabelas a cada execução. A persistência das tabelas no Supabase é comprovada pela captura abaixo:
 
    ![Tabelas persistidas no Supabase](evidencias/Captura%20de%20tela%202026-09-21%20201313.png)
+
 4. **Análise** — avaliação de qualidade dos dados (completude, unicidade, consistência, conformidade, acurácia) e resposta às cinco perguntas de negócio por meio de consultas SQL executadas diretamente sobre o banco na nuvem.
 
 O notebook completo, com todas as etapas documentadas célula a célula, está em `MVP_Seguranca_Cibernetica_(3).ipynb`.
 
 ## Resultados
 
-- **P1:** falhas de execução de código (injeção, desserialização, upload de arquivo) têm as maiores severidades médias; CWE-434 se destaca em 2024, com 687 CVEs e média de 8,10.
-  
+**P1:** falhas de execução de código (injeção, desserialização, upload de arquivo) têm as maiores severidades médias; CWE-434 se destaca em 2024, com 687 CVEs e média de 8,10.
+
 ![Resultado da consulta da Pergunta 1](evidencias/Captura%20de%20tela%202026-09-21%20201648.png)
 
+**P2:** o tempo até a última atualização é praticamente igual entre as severidades (865 a 892 dias), o que reflete o ciclo de reanálise do NVD, e não o tempo de resposta do fornecedor.
 
-- **P2:** o tempo até a última atualização é praticamente igual entre as severidades (865 a 892 dias), o que reflete o ciclo de reanálise do NVD, e não o tempo de resposta do fornecedor.
-  
 ![Resultado da consulta da Pergunta 2](evidencias/Captura%20de%20tela%202026-09-21%20201654.png)
 
+**P3:** o kernel Linux concentra o maior número de CVEs críticas (192), mais que o dobro do segundo colocado, XWiki (95).
 
-- **P3:** o kernel Linux concentra o maior número de CVEs críticas (192), mais que o dobro do segundo colocado, XWiki (95).
 ![Resultado da consulta da Pergunta 3](evidencias/Captura%20de%20tela%202026-09-21%20201701.png)
 
-- **P4:** o volume mensal de CVEs críticas varia de 528 a 737, sem padrão sazonal robusto no período de dois anos.
+**P4:** o volume mensal de CVEs críticas varia de 528 a 737, sem padrão sazonal robusto no período de dois anos.
+
 ![Resultado da consulta da Pergunta 4](evidencias/Captura%20de%20tela%202026-09-21%20201705.png)
 
-- **P5:** as CVEs sem score se concentram no status Rejected (100%); em Deferred são 4,17% e, nos demais status, praticamente nenhuma.
+**P5:** as CVEs sem score se concentram no status Rejected (100%); em Deferred são 4,17% e, nos demais status, praticamente nenhuma.
+
 ![Resultado da consulta da Pergunta 5](evidencias/Captura%20de%20tela%202026-09-21%20201712.png)
 
-Em conjunto, os resultados apontam dois eixos de priorização: falhas de execução de código e o ecossistema Linux. As discussões completas estão no notebook, e as evidências de cada consulta, na pasta [`evidencias`](evidencias/).
+Em conjunto, os resultados indicam que o esforço de correção deve priorizar falhas de execução de código e sistemas baseados em Linux. As discussões completas estão no notebook.
 
 ## Qualidade dos dados
 
-*A avaliação cobriu completude, unicidade, consistência, conformidade e acurácia sobre as 71.653 linhas da tabela fato. Os únicos nulos encontrados foram em cvss_score, cvss_severidade e cvss_versao (3.209 registros, 4,48% cada) — as CVEs ainda sem pontuação atribuída, coerente com o resultado da Pergunta 5. Não há duplicatas de cve_id (unicidade) nem inconsistência entre datas de publicação e modificação. Na conformidade, 11 registros ficaram fora do domínio de severidade esperado: são CVEs com o valor textual "NONE" retornado pela própria NVD (distinto de nulo), não previsto no domínio declarado no Catálogo de Dados. Acurácia: nenhum score fora do intervalo válido [0, 10]. Em conjunto, o conjunto de dados apresenta alta qualidade, sem problemas que comprometam as análises realizadas.*
+A avaliação cobriu completude, unicidade, consistência, conformidade e acurácia sobre as 71.653 linhas da tabela fato. Os únicos nulos encontrados foram em cvss_score, cvss_severidade e cvss_versao (3.209 registros, 4,48% cada), correspondentes às CVEs sem pontuação atribuída, o que é coerente com o resultado da Pergunta 5. Não há duplicatas de cve_id nem inconsistências entre as datas de publicação e de modificação. Na conformidade, identificaram-se 11 registros com severidade "NONE", inicialmente fora do domínio declarado; verificou-se que se trata da classificação oficial do CVSS v3 para nota 0.0, e o domínio do Catálogo de Dados foi corrigido. Na acurácia, nenhum score ficou fora do intervalo válido [0, 10]. Em conjunto, o conjunto de dados apresenta alta qualidade, e as ocorrências identificadas foram explicadas e tratadas.
 
 ## Autoavaliação
 
@@ -81,26 +82,28 @@ Em conjunto, os resultados apontam dois eixos de priorização: falhas de execu�
    O campo de última modificação da NVD não diferencia correção do fornecedor de reanálise interna, comprometendo a Pergunta 2. A janela de dois anos limita conclusões sazonais (Pergunta 4). E a modelagem por CPE gerou duplicidade em alguns casos, com o mesmo produto aparecendo separadamente como hardware e firmware.
 
 3. **Quais decisões técnicas seriam tomadas de outra forma caso o trabalho fosse reiniciado?**
-   Coletaria também o campo de referências externas de cada CVE, para aproximar melhor o momento de disponibilização de um patch. Na modelagem, unificaria pares de hardware e firmware como um único produto. E optaria desde o início por uma plataforma de nuvem sem exigência de conta de faturamento — a tentativa inicial com o BigQuery consumiu tempo desproporcional ao benefício, o que levou à migração para um Postgres gerenciado.
+   Coletaria também o campo de referências externas de cada CVE, para aproximar melhor o momento de disponibilização de um patch. Na modelagem, unificaria pares de hardware e firmware como um único produto. E optaria desde o início por uma plataforma de nuvem sem exigência de conta de faturamento: a tentativa inicial com o BigQuery consumiu tempo desproporcional ao benefício, o que levou à migração para um Postgres gerenciado.
 
 4. **Que extensões seriam necessárias para transformar este MVP em uma solução de uso contínuo?**
-   Carga incremental em vez de recarga completa; execução agendada automaticamente (ex: GitHub Actions), sem depender de rodar o notebook manualmente; uso do campo de referências externas para estimar o tempo real de patch por fornecedor; e um painel conectado diretamente ao banco, para consulta contínua sem reexecutar o notebook.
+   Carga incremental em vez de recarga completa; execução agendada automaticamente (ex.: GitHub Actions), sem depender de rodar o notebook manualmente; uso do campo de referências externas para estimar o tempo real de patch por fornecedor; e um painel conectado diretamente ao banco, para consulta contínua sem reexecutar o notebook.
 
 ## Estrutura do repositório
- ├── README.md
-   ├── LICENSE
-   ├── MVP_Seguranca_Cibernetica_(3).ipynb
-   ├── catalogo/
-   │   ├── catalogo_dados.csv
-   │   └── metadados_coleta.json
-   └── evidencias/
-       ├── Captura de tela 2026-09-21 201313.png
-       ├── Captura de tela 2026-09-21 201648.png
-       ├── Captura de tela 2026-09-21 201654.png
-       ├── Captura de tela 2026-09-21 201701.png
-       ├── Captura de tela 2026-09-21 201705.png
-       └── Captura de tela 2026-09-21 201712.png
 
+```
+├── README.md
+├── LICENSE
+├── MVP_Seguranca_Cibernetica_(3).ipynb
+├── catalogo/
+│   ├── catalogo_dados.csv
+│   └── metadados_coleta.json
+└── evidencias/
+    ├── Captura de tela 2026-09-21 201313.png
+    ├── Captura de tela 2026-09-21 201648.png
+    ├── Captura de tela 2026-09-21 201654.png
+    ├── Captura de tela 2026-09-21 201701.png
+    ├── Captura de tela 2026-09-21 201705.png
+    └── Captura de tela 2026-09-21 201712.png
+```
 
 ## Como reproduzir
 

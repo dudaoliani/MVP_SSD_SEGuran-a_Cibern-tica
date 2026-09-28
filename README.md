@@ -44,7 +44,13 @@ O notebook completo, com todas as etapas documentadas célula a célula, está e
 
 ## Resultados
 
-Vulnerabilidades de execução de código (injeção, desserialização, upload de arquivo) têm as maiores severidades médias, com destaque para CWE-434 em alta em 2024. Linux concentra o maior número de CVEs críticas. Tempo até a última atualização não varia por severidade — limitação do dado, não achado de negócio. Sazonalidade mensal é moderada, sem padrão robusto. Score ausente concentra-se apenas no status Rejected.
+- **P1:** falhas de execução de código (injeção, desserialização, upload de arquivo) têm as maiores severidades médias; CWE-434 se destaca em 2024, com 687 CVEs e média de 8,10.
+- **P2:** o tempo até a última atualização é praticamente igual entre as severidades (865 a 892 dias), o que reflete o ciclo de reanálise do NVD, e não o tempo de resposta do fornecedor.
+- **P3:** o kernel Linux concentra o maior número de CVEs críticas (192), mais que o dobro do segundo colocado, XWiki (95).
+- **P4:** o volume mensal de CVEs críticas varia de 528 a 737, sem padrão sazonal robusto no período de dois anos.
+- **P5:** as CVEs sem score se concentram no status Rejected (100%); em Deferred são 4,17% e, nos demais status, praticamente nenhuma.
+
+Em conjunto, os resultados apontam dois eixos de priorização: falhas de execução de código e o ecossistema Linux. As discussões completas estão no notebook, e as evidências de cada consulta, na pasta [`evidencias`](evidencias/).
 
 ## Qualidade dos dados
 
@@ -72,8 +78,12 @@ Vulnerabilidades de execução de código (injeção, desserialização, upload 
    │   ├── catalogo_dados.csv
    │   └── metadados_coleta.json
    └── evidencias/
-       ├── supabase_table_editor.png
-       └── resultados_consultas.png
+       ├── Captura de tela 2026-09-21 201313.png
+       ├── Captura de tela 2026-09-21 201648.png
+       ├── Captura de tela 2026-09-21 201654.png
+       ├── Captura de tela 2026-09-21 201701.png
+       ├── Captura de tela 2026-09-21 201705.png
+       └── Captura de tela 2026-09-21 201712.png
 
 
 ## Como reproduzir

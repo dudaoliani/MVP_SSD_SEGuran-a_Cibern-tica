@@ -38,6 +38,9 @@ O pipeline foi construído em Python, executado no Google Colab, e segue as etap
    - `dim_tempo`: granularidade diária, para agregações temporais.
    - Documentação completa de cada atributo em `catalogo/catalogo_dados.csv`.
 3. **Carga** — persistência em banco PostgreSQL gerenciado (Supabase), com recarga completa das tabelas a cada execução.
+A persistência das tabelas no Supabase é comprovada pela captura abaixo:
+
+   ![Tabelas persistidas no Supabase](evidencias/Captura%20de%20tela%202026-09-21%20201313.png)
 4. **Análise** — avaliação de qualidade dos dados (completude, unicidade, consistência, conformidade, acurácia) e resposta às cinco perguntas de negócio por meio de consultas SQL executadas diretamente sobre o banco na nuvem.
 
 O notebook completo, com todas as etapas documentadas célula a célula, está em `MVP_Seguranca_Cibernetica_(3).ipynb`.
